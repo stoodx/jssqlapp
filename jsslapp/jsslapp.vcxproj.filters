@@ -18,23 +18,17 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stdafx.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="duktape.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CDukSyncNativeData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="duk_config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="jsslapp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
