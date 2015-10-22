@@ -27,7 +27,7 @@
     <ClInclude Include="duktape.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="СDukSyncNativeData.h">
+    <ClInclude Include="CDukSyncNativeData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -41,7 +41,7 @@
     <ClCompile Include="duktape.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="СDukSyncNativeData.cpp">
+    <ClCompile Include="CDukSyncNativeData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -7,7 +7,7 @@
 extern "C" {
 #include "duktape.h"
 }
-#include "ÑDukSyncNativeData.h"
+#include "CDukSyncNativeData.h"
 
 int main(int argc, char* argv[])
 {
@@ -25,7 +25,7 @@ int main(int argc, char* argv[])
 	}
 	else
 	{
-		stoodx::ÑDukSyncNativeData* pDukeNative = new stoodx::ÑDukSyncNativeData(ctx);
+		stoodx::CDukSyncNativeData* pDukeNative = new stoodx::CDukSyncNativeData(ctx);
 		//run js
 		if (duk_peval_file(ctx, argv[1]) == 0)
 		{
