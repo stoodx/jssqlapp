@@ -33,8 +33,8 @@ int main(int argc, char* argv[])
 			return 1;
 		}
 		//run js
-	//	if (duk_peval_file(ctx, argv[1]) == 0)
-		if (duk_peval_file(ctx, "D:\\Work\\jssqlapp\\trunk\\jsslapp\\Files\\sql-debug.js") == 0)
+		if (duk_peval_file(ctx, argv[1]) == 0)
+//		if (duk_peval_file(ctx, "D:\\Work\\jssqlapp\\trunk\\jsslapp\\Files\\1.js") == 0)
 		{
 			duk_pop(ctx);
 			duk_get_prop_string(ctx, -1, "main");
