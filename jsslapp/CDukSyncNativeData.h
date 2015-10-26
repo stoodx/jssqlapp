@@ -23,6 +23,7 @@ namespace stoodx
 
 		DUKSYNC_STATUS InitNative(const char* strFunctionName);
 		const char* ReadFullStack();
+		const char* GetDukLastError();
 
 	private:
 		__int64 GetFileSize(const char* strFileName);

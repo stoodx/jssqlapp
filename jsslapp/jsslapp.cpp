@@ -44,16 +44,15 @@ int main(int argc, char* argv[])
 			duk_push_string(ctx, argv[3]);
 			if (duk_pcall(ctx, 2) != 0)
 			{
-				std::cout << "Error: " << duk_safe_to_string(ctx, -1) << std::endl;
+				std::cout << "Error: " << pDukeNative->GetDukLastError() << std::endl;
 				//stack dump
-				duk_push_context_dump(ctx);
 				std::cout << "Stack:" << std::endl << pDukeNative->ReadFullStack() << std::endl;
 			}
 			duk_pop(ctx);
 		}
 		else
 		{
-			std::cout << "Fail duk_peval_file():" << std::endl <<  duk_safe_to_string(ctx, -1) << std::endl;
+			std::cout << "Fail duk_peval_file():" << std::endl <<  pDukeNative->GetDukLastError() << std::endl;
 			nRes = 1;
 		}
 		delete pDukeNative;

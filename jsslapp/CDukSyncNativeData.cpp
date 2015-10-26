@@ -88,7 +88,15 @@ stoodx::CDukSyncNativeData::~CDukSyncNativeData(void)
 
 const char* stoodx::CDukSyncNativeData::ReadFullStack()
 {
-	if (m_status == DUKSYNC_ERR)
+	if (!m_ctx)
+		return NULL;
+	duk_push_context_dump(m_ctx);
+	return duk_safe_to_string(m_ctx, -1);
+}
+
+const char* stoodx::CDukSyncNativeData::GetDukLastError()
+{
+	if (!m_ctx)
 		return NULL;
 	return duk_safe_to_string(m_ctx, -1);
 }
