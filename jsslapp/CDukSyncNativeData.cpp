@@ -14,14 +14,19 @@ duk_ret_t stoodx::CDukSyncNativeData::get_sync_data_native(duk_context *ctx)
 		duk_push_null(ctx);
 		return 1;
 	}
+	if (m_pCDukSyncNativeData->m_status == DUKSYNC_ERR)
+		return 1;	
 
 	int nSize = 0;  
-	nSize = (int) m_pCDukSyncNativeData->getFileSize(strFileName.c_str());
+	nSize = (int) m_pCDukSyncNativeData->GetFileSize(strFileName.c_str());
 	if ( nSize > 0)
 	{
 		m_pCDukSyncNativeData->m_pBuf = (char*)duk_push_buffer(ctx, nSize, 0);	
 		if (m_pCDukSyncNativeData->m_pBuf == NULL)
+		{
+			m_pCDukSyncNativeData->m_status = DUKSYNC_ERR;
 			duk_push_null(ctx);
+		}
 		else
 		{
 			 std::ifstream is (strFileName, std::ifstream::binary);
@@ -31,11 +36,17 @@ duk_ret_t stoodx::CDukSyncNativeData::get_sync_data_native(duk_context *ctx)
 				 is.close();
 			 }
 			 else
+			 {
+				 m_pCDukSyncNativeData->m_status = DUKSYNC_ERR;
 				 duk_push_null(ctx);
+			 }
 		}
 	}
 	else
+	{
+		m_pCDukSyncNativeData->m_status = DUKSYNC_ERR;
 		duk_push_null(ctx);
+	}
 	return 1;
 }
 
@@ -43,23 +54,46 @@ duk_ret_t stoodx::CDukSyncNativeData::get_sync_data_native(duk_context *ctx)
 stoodx::CDukSyncNativeData::CDukSyncNativeData(duk_context * ctx)
 	: m_ctx(ctx)
 	, m_pBuf(NULL)
+	, m_status(DUKSYNC_ERR)
 {
 	if (!m_ctx)
 		return;
+	m_status = DUKSYNC_INIT;
 	m_pCDukSyncNativeData = this;
-	//preparate a native function
-	duk_push_global_object(m_ctx);
-	duk_push_c_function(ctx, get_sync_data_native, 1);
-	duk_put_prop_string(ctx, -2, "getSyncDataNative");
+
 }
 
+stoodx::CDukSyncNativeData::DUKSYNC_STATUS stoodx::CDukSyncNativeData::InitNative(const char* strFunctionName)
+{
+	if (m_status == DUKSYNC_ERR)
+		return m_status;
+	if (!strFunctionName)
+	{
+		m_status = DUKSYNC_ERR;
+		return m_status;
+	}
+
+	//preparate a native function
+	duk_push_global_object(m_ctx);
+	duk_push_c_function(m_ctx, get_sync_data_native, 1);
+	duk_put_prop_string(m_ctx, -2,  strFunctionName);
+	m_status = DUKSYNC_NATIVE_READY;
+	return m_status;
+}
 
 stoodx::CDukSyncNativeData::~CDukSyncNativeData(void)
 {
 	m_pCDukSyncNativeData = NULL;
 }
 
-__int64 stoodx::CDukSyncNativeData::getFileSize(const char* strFileName)
+const char* stoodx::CDukSyncNativeData::ReadFullStack()
+{
+	if (m_status == DUKSYNC_ERR)
+		return NULL;
+	return duk_safe_to_string(m_ctx, -1);
+}
+
+__int64 stoodx::CDukSyncNativeData::GetFileSize(const char* strFileName)
 {
 	if (!strFileName)
 	{

@@ -14,6 +14,7 @@
     <ProjectGuid>{9A8FA36C-DBF3-4D4F-912D-575199A49792}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>jsslapp</RootNamespace>
+    <ProjectName>jssqlapp</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
