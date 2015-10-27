@@ -123,3 +123,11 @@ __int64 stoodx::CDukSyncNativeData::GetFileSize(const char* strFileName)
     CloseHandle(hFile);
     return liFileSize.QuadPart;
 }
+
+bool stoodx::CDukSyncNativeData::DukPop( duk_idx_t nCount)
+{
+	if (m_status == DUKSYNC_ERR)
+		return false;
+	duk_pop_n(m_ctx, nCount);
+	return true;
+}

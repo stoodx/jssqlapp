@@ -48,7 +48,7 @@ int main(int argc, char* argv[])
 				//stack dump
 				std::cout << "Stack:" << std::endl << pDukeNative->ReadFullStack() << std::endl;
 			}
-			duk_pop(ctx);
+			pDukeNative->DukPop(); //Pop off stack
 		}
 		else
 		{
