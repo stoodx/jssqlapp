@@ -51,11 +51,13 @@ duk_ret_t stoodx::CDukSyncNativeData::get_sync_data_native(duk_context *ctx)
 }
 
 
-stoodx::CDukSyncNativeData::CDukSyncNativeData(duk_context * ctx)
-	: m_ctx(ctx)
+stoodx::CDukSyncNativeData::CDukSyncNativeData()
+	: m_ctx(NULL)
 	, m_pBuf(NULL)
 	, m_status(DUKSYNC_ERR)
+	, m_nArg(0)
 {
+	m_ctx = duk_create_heap_default();
 	if (!m_ctx)
 		return;
 	m_status = DUKSYNC_INIT;
@@ -84,6 +86,49 @@ stoodx::CDukSyncNativeData::DUKSYNC_STATUS stoodx::CDukSyncNativeData::InitNativ
 stoodx::CDukSyncNativeData::~CDukSyncNativeData(void)
 {
 	m_pCDukSyncNativeData = NULL;
+	if (m_ctx)
+		duk_destroy_heap(m_ctx);
+}
+
+bool stoodx::CDukSyncNativeData::LoadStartModule(const char* strFileName)
+{
+	if (m_status == DUKSYNC_ERR || !strFileName)
+		return false;
+	if (duk_peval_file(m_ctx, strFileName) == 0)
+	{
+		duk_pop(m_ctx);
+		m_status = DUKSYNC_START_MODULE_LOADED;
+		return true;
+	}
+	m_status = DUKSYNC_ERR;
+	return false;
+}
+
+bool stoodx::CDukSyncNativeData::DefineStartFunction(const char* strFunc)
+{
+	if (m_status != DUKSYNC_START_MODULE_LOADED || !strFunc)
+		return false;
+	duk_get_prop_string(m_ctx, -1, strFunc);
+	m_status = DUKSYNC_START_FUNC_DEFINED;
+	return true;
+}
+
+bool stoodx::CDukSyncNativeData::LoadArgumentForStartFunction(const char* strArg)
+{
+	if (m_status != DUKSYNC_START_FUNC_DEFINED || !strArg)
+		return false;
+	duk_push_string(m_ctx, strArg);
+	m_nArg++;
+	return true;
+}
+
+bool stoodx::CDukSyncNativeData::RunJS()
+{
+	if (m_status != DUKSYNC_START_FUNC_DEFINED)
+		return false;
+	if (duk_pcall(m_ctx, m_nArg) != 0)
+		return false;
+	return true;
 }
 
 const char* stoodx::CDukSyncNativeData::ReadFullStack()

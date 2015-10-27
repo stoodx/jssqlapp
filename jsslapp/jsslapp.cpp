@@ -5,20 +5,11 @@
 #include <iostream>
 #include <fstream>
 
-extern "C" {
-#include "duktape.h"
-}
 #include "CDukSyncNativeData.h"
 
 int main(int argc, char* argv[])
 {
 	int nRes = 0;
-	duk_context* ctx = duk_create_heap_default();
-	if(!ctx)
-	{
-		std::cout << "Fail duk_create_heap_default()" << std::endl; 
-		return 1;
-	}
 	if (argc < 4 || !argv[1] || !argv[2] || !argv[3])
 	{
 		std::cout <<  "Error:" << std::endl << 
@@ -28,22 +19,23 @@ int main(int argc, char* argv[])
 	}
 	else
 	{
-		stoodx::CDukSyncNativeData* pDukeNative = new stoodx::CDukSyncNativeData(ctx);
+		stoodx::CDukSyncNativeData* pDukeNative = new stoodx::CDukSyncNativeData(); //init duktape
 		if (pDukeNative == NULL)
 		{
-			duk_destroy_heap(ctx);
+			std::cout << "No memory" << std::endl;
+			std::cout << "Fail duk_create_heap_default()" << std::endl; 
 			return 1;
 		}
-		pDukeNative->InitNative("readFileNative");
+		pDukeNative->InitNative("readFileNative"); //define a native function
 		//run js
-		if (duk_peval_file(ctx, argv[1]) == 0)
+		if (pDukeNative->LoadStartModule(argv[1])) //load a start modeule
 		{
-			duk_pop(ctx);
-			duk_get_prop_string(ctx, -1, "main");
-			duk_push_string(ctx, argv[2]);
-			duk_push_string(ctx, argv[3]);
-			if (duk_pcall(ctx, 2) != 0)
+			pDukeNative->DefineStartFunction("main"); //define start function
+			pDukeNative->LoadArgumentForStartFunction(argv[2]); //load 1 argument
+			pDukeNative->LoadArgumentForStartFunction(argv[3]); //load 2 argument 
+			if (!pDukeNative->RunJS()) //run
 			{
+				//read error
 				std::cout << "Error: " << pDukeNative->GetDukLastError() << std::endl;
 				//stack dump
 				std::cout << "Stack:" << std::endl << pDukeNative->ReadFullStack() << std::endl;
@@ -55,10 +47,10 @@ int main(int argc, char* argv[])
 			std::cout << "Fail duk_peval_file():" << std::endl <<  pDukeNative->GetDukLastError() << std::endl;
 			nRes = 1;
 		}
-		delete pDukeNative;
+		delete pDukeNative; //close
 	}
 
-	duk_destroy_heap(ctx);
+	
 	std::system("pause");
 	return nRes;
 }
