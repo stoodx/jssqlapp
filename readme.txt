@@ -14,6 +14,4 @@ Result:
 
 
 ****
-
-
-
+The folder \trunk\jsslapp\src-separate is used only for debug.

@@ -26,12 +26,16 @@ Duktape.modSearch = function (id)
 
 function main(sqlModule, databaseName)
 {
-    var sql = require(sqlModule);
-//	var filebuffer = readFile(databaseName);
-/*	var db = new sql.Database(filebuffer);
-	db.each("SELECT id,url FROM moz_favicons", function(row) {
-		console.log(row.id, row.url);
-	});
-	db.close();*/
-	print("Test finish");
+	try {	
+		var sql = require(sqlModule);
+	//	var filebuffer = readFile(databaseName);
+	/*	var db = new sql.Database(filebuffer);
+		db.each("SELECT id,url FROM moz_favicons", function(row) {
+			console.log(row.id, row.url);
+		});
+		db.close();*/
+		print("Test finish");
+	}	catch (e) {
+		print(e.stack);
+	}
 }

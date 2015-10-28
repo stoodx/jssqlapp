@@ -136,6 +136,7 @@ const char* stoodx::CDukSyncNativeData::ReadFullStack()
 	if (!m_ctx)
 		return NULL;
 	duk_push_context_dump(m_ctx);
+	//duk_get_prop_string(m_ctx, -1, "stack");
 	return duk_safe_to_string(m_ctx, -1);
 }
 

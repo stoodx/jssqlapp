@@ -38,7 +38,7 @@ int main(int argc, char* argv[])
 				//read error
 				std::cout << "Error: " << pDukeNative->GetDukLastError() << std::endl;
 				//stack dump
-				std::cout << "Stack:" << std::endl << pDukeNative->ReadFullStack() << std::endl;
+				//std::cout << "Stack:" << std::endl << pDukeNative->ReadFullStack() << std::endl;
 			}
 			pDukeNative->DukPop(); //Pop off stack
 		}
