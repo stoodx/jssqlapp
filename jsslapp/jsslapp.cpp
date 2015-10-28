@@ -13,7 +13,7 @@ int main(int argc, char* argv[])
 	if (argc < 4 || !argv[1] || !argv[2] || !argv[3])
 	{
 		std::cout <<  "Error:" << std::endl << 
-			"Nead a pathes to js files" << std::endl;
+			"Need the pathes to js files" << std::endl;
 		std::cout <<  "Usage:" << std::endl << 
 			"jssqlapp.exe <path_to_start_js_module> <path_to_sql_js_module> <path_to_sql_database>" << std::endl; 
 	}
@@ -26,11 +26,11 @@ int main(int argc, char* argv[])
 			std::cout << "Fail duk_create_heap_default()" << std::endl; 
 			return 1;
 		}
-		pDukeNative->InitNative("readFileNative"); //define a native function
+		pDukeNative->InitNative("readFileNative"); //init of a native function
 		//run js
-		if (pDukeNative->LoadStartModule(argv[1])) //load a start modeule
+		if (pDukeNative->LoadStartModule(argv[1])) //load a start module
 		{
-			pDukeNative->DefineStartFunction("main"); //define start function
+			pDukeNative->DefineStartFunction("main"); //define start function - function main(sqlModule, databaseName)
 			pDukeNative->LoadArgumentForStartFunction(argv[2]); //load 1 argument
 			pDukeNative->LoadArgumentForStartFunction(argv[3]); //load 2 argument 
 			if (!pDukeNative->RunJS()) //run
