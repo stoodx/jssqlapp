@@ -28,12 +28,21 @@ function main(sqlModule, databaseName)
 {
 	try {	
 		var sql = require(sqlModule);
-	//	var filebuffer = readFile(databaseName);
-	/*	var db = new sql.Database(filebuffer);
+
+		print("readFile")
+		var filebuffer = readFile(databaseName);
+
+		print("sql.Database")
+		var db = new sql.Database(filebuffer);
+
+		print("start SELECT")
 		db.each("SELECT id,url FROM moz_favicons", function(row) {
-			console.log(row.id, row.url);
+			print(row.id, row.url);
 		});
-		db.close();*/
+
+		print("db.close")
+		db.close();
+		
 		print("Test finish");
 	}	catch (e) {
 		print(e.stack);
